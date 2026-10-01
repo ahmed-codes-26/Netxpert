@@ -1,22 +1,25 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/Common/ScrollToTop';
 import NavBar from './components/Home/NavBar';
-import Hero from './components/Home/Hero';
-import About from './components/Home/About';
-import Services from './components/Home/Services';
-import Portfolio from './components/Home/Portfolio';
-import Contact from './components/Home/Contact';
 import Footer from './components/Home/Footer';
+import Home from './pages/Home';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import NotFound from './pages/NotFound';
 
 const App = () => {
     return (
-        <>
+        <BrowserRouter>
+            <ScrollToTop />
             <NavBar />
-            <Hero />
-            <About />
-            <Services />
-            <Portfolio />
-            <Contact />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
             <Footer />
-        </>
+        </BrowserRouter>
     );
 };
 

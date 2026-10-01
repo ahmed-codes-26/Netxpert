@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
@@ -12,6 +13,8 @@ const navLinks = [
 const NavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
@@ -45,9 +48,15 @@ const NavBar = () => {
     // Precise smooth scroll positioning directly below the navigation bar
     const scrollToSection = (e, href) => {
         e.preventDefault();
+        closeMenu();
+
+        if (location.pathname !== '/') {
+            navigate('/' + (href === '#' ? '' : href));
+            return;
+        }
+
         if (!href || href === '#') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            closeMenu();
             return;
         }
 
@@ -55,7 +64,6 @@ const NavBar = () => {
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            // Target offset always matches the sticky navbar height (62px) once scrolled to destination
             const stickyNavHeight = 62;
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - stickyNavHeight;
@@ -65,7 +73,6 @@ const NavBar = () => {
                 behavior: 'smooth',
             });
         }
-        closeMenu();
     };
 
     return (
