@@ -1,3 +1,10 @@
+import { useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 // Custom CCTV Camera SVG Icon with currentColor for instant CSS hover transitions
 const CctvIcon = ({ className = "h-12 w-12" }) => (
     <svg className={className} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -62,25 +69,74 @@ const serviceList = [
 ];
 
 const Services = () => {
+    const servicesRef = useRef(null);
+
+    useGSAP(
+        () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            gsap.fromTo(
+                '.services-title',
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.services-title',
+                        start: 'top 88%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+
+            gsap.fromTo(
+                '.service-card',
+                { y: 40, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.15,
+                    duration: 0.75,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.services-grid',
+                        start: 'top 85%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+        },
+        { scope: servicesRef }
+    );
+
     return (
-        <section id="services" className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
+        <section
+            id="services"
+            ref={servicesRef}
+            className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20"
+        >
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
                 {/* Left-Aligned Section Title */}
-                <div className="mb-6 sm:mb-8">
+                <div className="services-title mb-6 sm:mb-8">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight">
                         Services
                     </h2>
                 </div>
 
-                {/* 3-Column Service Cards Grid with Pure CSS Hover */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+                {/* 3-Column Service Cards Grid */}
+                <div className="services-grid grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
                     {serviceList.map((service) => {
                         const Icon = service.icon;
 
                         return (
                             <div
                                 key={service.id}
-                                className="group rounded-2xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer min-h-[320px] bg-[#051838] border border-white/10 text-white hover:bg-red hover:text-white hover:border-red hover:shadow-2xl hover:shadow-red/30 hover:-translate-y-1.5 shadow-lg"
+                                className="service-card group rounded-2xl p-7 sm:p-8 flex flex-col justify-between cursor-pointer min-h-[320px] bg-[#051838] border border-white/10 text-white transition-[background-color,border-color,box-shadow,transform] duration-300 hover:bg-red hover:text-white hover:border-red hover:shadow-2xl hover:shadow-red/30 hover:-translate-y-1.5 shadow-lg"
                             >
                                 <div>
                                     {/* Line Art Icon with pure CSS hover color transition */}

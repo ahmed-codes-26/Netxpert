@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { MapPin, Phone, Mail, CheckCircle2 } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const Contact = () => {
+    const contactRef = useRef(null);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -13,6 +19,71 @@ const Contact = () => {
     const [touched, setTouched] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useGSAP(
+        () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            // Left Column Animation Timeline
+            const tlLeft = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '.contact-left',
+                    start: 'top 82%',
+                    toggleActions: 'play none none none',
+                },
+                defaults: { ease: 'power3.out' },
+                onComplete: () => {
+                    gsap.set(['.contact-heading', '.contact-desc', '.contact-info-item', '.contact-hours-card'], {
+                        clearProps: 'transform,opacity',
+                    });
+                },
+            });
+
+            tlLeft.fromTo(
+                '.contact-heading',
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.7 }
+            )
+                .fromTo(
+                    '.contact-desc',
+                    { y: 20, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.6 },
+                    '-=0.4'
+                )
+                .fromTo(
+                    '.contact-info-item',
+                    { x: -25, opacity: 0 },
+                    { x: 0, opacity: 1, stagger: 0.12, duration: 0.6 },
+                    '-=0.3'
+                )
+                .fromTo(
+                    '.contact-hours-card',
+                    { y: 20, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.6 },
+                    '-=0.2'
+                );
+
+            // Right Column Form Animation
+            gsap.fromTo(
+                '.contact-form-wrapper',
+                { x: 30, opacity: 0 },
+                {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.85,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.contact-form-wrapper',
+                        start: 'top 80%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+        },
+        { scope: contactRef }
+    );
 
     const validate = () => {
         const newErrors = {};
@@ -89,24 +160,28 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="relative w-full bg-[#00102E] border-t border-white/10 py-12 sm:py-16 md:py-20 scroll-mt-16 sm:scroll-mt-20">
+        <section
+            id="contact"
+            ref={contactRef}
+            className="relative w-full bg-[#00102E] border-t border-white/10 py-12 sm:py-16 md:py-20 scroll-mt-16 sm:scroll-mt-20"
+        >
             <div className="max-w-7xl mx-auto px-5 sm:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
                     
                     {/* Left Column: Info & Details (5 cols) */}
-                    <div className="lg:col-span-5 flex flex-col">
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight mb-4 sm:mb-5">
+                    <div className="contact-left lg:col-span-5 flex flex-col">
+                        <h2 className="contact-heading text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight mb-4 sm:mb-5">
                             Get in Touch
                         </h2>
                         
-                        <p className="text-slate-300 text-sm sm:text-[15px] leading-relaxed mb-8 sm:mb-10 max-w-lg">
+                        <p className="contact-desc text-slate-300 text-sm sm:text-[15px] leading-relaxed mb-8 sm:mb-10 max-w-lg">
                             Have a question about our security infrastructure services or need an urgent system assessment? Reach out to our engineering team today.
                         </p>
 
                         {/* Contact Information List */}
                         <div className="space-y-6 sm:space-y-7 mb-8 sm:mb-10">
                             {/* Head Office */}
-                            <div className="flex items-start gap-4">
+                            <div className="contact-info-item flex items-start gap-4">
                                 <div className="mt-1 text-red shrink-0">
                                     <MapPin className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
@@ -121,7 +196,7 @@ const Contact = () => {
                             </div>
 
                             {/* Direct Phone */}
-                            <div className="flex items-start gap-4">
+                            <div className="contact-info-item flex items-start gap-4">
                                 <div className="mt-1 text-red shrink-0">
                                     <Phone className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
@@ -139,7 +214,7 @@ const Contact = () => {
                             </div>
 
                             {/* Email Support */}
-                            <div className="flex items-start gap-4">
+                            <div className="contact-info-item flex items-start gap-4">
                                 <div className="mt-1 text-red shrink-0">
                                     <Mail className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
@@ -158,7 +233,7 @@ const Contact = () => {
                         </div>
 
                         {/* Business Hours Card */}
-                        <div className="bg-[#051838] rounded-2xl p-6 border border-white/10 max-w-lg shadow-lg">
+                        <div className="contact-hours-card bg-[#051838] rounded-2xl p-6 border border-white/10 max-w-lg shadow-lg">
                             <h4 className="font-heading font-bold text-white text-base mb-2">
                                 Business Hours
                             </h4>
@@ -172,7 +247,7 @@ const Contact = () => {
                     </div>
 
                     {/* Right Column: Contact Form (7 cols) */}
-                    <div className="lg:col-span-7">
+                    <div className="contact-form-wrapper lg:col-span-7">
                         <form onSubmit={handleSubmit} noValidate className="flex flex-col space-y-5 sm:space-y-6">
                             
                             {/* Success Notification Banner */}

@@ -1,5 +1,11 @@
+import { useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const quickLinks = [
     { name: 'Home', href: '#' },
@@ -18,8 +24,52 @@ const serviceLinks = [
 ];
 
 const Footer = () => {
+    const footerRef = useRef(null);
     const navigate = useNavigate();
     const location = useLocation();
+
+    useGSAP(
+        () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            gsap.fromTo(
+                '.footer-col',
+                { y: 35, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.12,
+                    duration: 0.75,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.footer-grid',
+                        start: 'top 90%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+
+            gsap.fromTo(
+                '.footer-bottom',
+                { y: 20, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.footer-bottom',
+                        start: 'top 96%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+        },
+        { scope: footerRef }
+    );
 
     // Smooth scroll navigation with 62px offset
     const scrollToSection = (e, href) => {
@@ -51,13 +101,16 @@ const Footer = () => {
     };
 
     return (
-        <footer className="relative bg-[#000A1D] text-white border-t border-white/10 overflow-hidden font-body">
+        <footer
+            ref={footerRef}
+            className="relative bg-[#000A1D] text-white border-t border-white/10 overflow-hidden font-body"
+        >
             <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 sm:pt-20 pb-12">
                 {/* 4-Column Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+                <div className="footer-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
                     
                     {/* Column 1: Brand & Bio & Social Media (4 cols) */}
-                    <div className="lg:col-span-4 flex flex-col space-y-5">
+                    <div className="footer-col lg:col-span-4 flex flex-col space-y-5">
                         <div className="flex items-center gap-3">
                             <img src="/logo.png" alt="Netxpert Logo" className="h-10 w-auto object-contain" />
                             <h3 className="text-2xl font-bold font-heading text-white tracking-tight">
@@ -113,7 +166,7 @@ const Footer = () => {
                     </div>
 
                     {/* Column 2: Quick Links (2 cols) */}
-                    <div className="lg:col-span-2">
+                    <div className="footer-col lg:col-span-2">
                         <h4 className="font-heading text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-5">
                             Quick Links
                         </h4>
@@ -133,7 +186,7 @@ const Footer = () => {
                     </div>
 
                     {/* Column 3: Our Services (3 cols) */}
-                    <div className="lg:col-span-3">
+                    <div className="footer-col lg:col-span-3">
                         <h4 className="font-heading text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-5">
                             Our Services
                         </h4>
@@ -153,7 +206,7 @@ const Footer = () => {
                     </div>
 
                     {/* Column 4: Get In Touch (3 cols) */}
-                    <div className="lg:col-span-3 flex flex-col space-y-5">
+                    <div className="footer-col lg:col-span-3 flex flex-col space-y-5">
                         <h4 className="font-heading text-sm sm:text-base font-bold text-white uppercase tracking-wider mb-1">
                             Get In Touch
                         </h4>
@@ -191,7 +244,7 @@ const Footer = () => {
                 </div>
 
                 {/* Sub-Footer Copyright Bar */}
-                <div className="mt-14 sm:mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/60">
+                <div className="footer-bottom mt-14 sm:mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/60">
                     <p>© 2026 Netxpert. All rights reserved.</p>
                     <div className="flex items-center gap-6">
                         <Link to="/privacy-policy" className="hover:text-white transition-colors">

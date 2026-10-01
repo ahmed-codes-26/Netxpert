@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 
 const TAU = Math.PI * 2
 const START = -Math.PI / 2
@@ -217,15 +218,29 @@ export default function NetworkBackground() {
     let w = 0, h = 0, k = 1, cx = 0, cy = 0, R = 0, frame = 0, raf
     let nodes = [], packets = [], hovered = -1
 
+    // GSAP Intro Bloom Object
+    const intro = { scale: reduce ? 1 : 0.35, opacity: reduce ? 1 : 0 }
+    let introTween = null
+    if (!reduce) {
+      introTween = gsap.to(intro, {
+        scale: 1,
+        opacity: 1,
+        duration: 1.4,
+        ease: 'power3.out',
+        onComplete: () => {
+          burst(0, 3)
+        },
+      })
+    }
+
     const tileSize = (n) => (n.big ? 58 : 44) * k
 
     const layout = () => {
-      const dpr = window.devicePixelRatio || 1
-      const r = parent.getBoundingClientRect()
-      w = r.width
-      h = r.height
-      canvas.width = w * dpr
-      canvas.height = h * dpr
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      w = parent.clientWidth || window.innerWidth
+      h = parent.clientHeight || window.innerHeight
+      canvas.width = Math.round(w * dpr)
+      canvas.height = Math.round(h * dpr)
       canvas.style.width = w + 'px'
       canvas.style.height = h + 'px'
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -234,7 +249,7 @@ export default function NetworkBackground() {
         // Mobile screens (< 768px): subtle backdrop layered only behind upper text area
         k = 0.68
         cx = w * 0.5
-        cy = Math.min(h * 0.32, 175)
+        cy = Math.min(h * 0.26, 140)
         R = Math.min(w * 0.36, 135)
       } else if (w < 1024) {
         // Tablet screens (768px – 1024px): side-by-side without overlapping left text
@@ -264,20 +279,24 @@ export default function NetworkBackground() {
 
     // boundary devices stay fixed on the circle; inner devices float
     const pos = (n, t) => {
-      if (n.edge) return { x: cx + n.hx * R, y: cy + n.hy * R }
+      const activeR = R * intro.scale
+      const floatY = reduce ? 0 : Math.sin(t / 2000) * 7
+      if (n.edge) return { x: cx + n.hx * activeR, y: cy + floatY + n.hy * activeR }
       const A = reduce ? 0 : 7 * k
       return {
-        x: cx + n.hx * R + Math.sin(t / 1700 + n.p1) * A + n.ox,
-        y: cy + n.hy * R + Math.cos(t / 1900 + n.p2) * A + n.oy,
+        x: cx + n.hx * activeR + Math.sin(t / 1700 + n.p1) * A + n.ox,
+        y: cy + floatY + n.hy * activeR + Math.cos(t / 1900 + n.p2) * A + n.oy,
       }
     }
 
-    const packetPoint = (p, P) => {
+    const packetPoint = (p, P, t) => {
+      const activeR = R * intro.scale
+      const floatY = reduce ? 0 : Math.sin(t / 2000) * 7
       const l = LINK_OF[p.a + '-' + p.b]
       if (l.arc) {
         const f = p.a === l.a ? p.t : 1 - p.t
         const th = nodes[l.a].ang + (TAU / RING) * f
-        return { x: cx + R * Math.cos(th), y: cy + R * Math.sin(th) }
+        return { x: cx + activeR * Math.cos(th), y: cy + floatY + activeR * Math.sin(th) }
       }
       const A = P[p.a], B = P[p.b]
       return { x: A.x + (B.x - A.x) * p.t, y: A.y + (B.y - A.y) * p.t }
@@ -312,13 +331,17 @@ export default function NetworkBackground() {
 
     const draw = (t) => {
       ctx.clearRect(0, 0, w, h)
+      ctx.globalAlpha = intro.opacity
+
+      const activeR = R * intro.scale
+      const floatY = reduce ? 0 : Math.sin(t / 2000) * 7
 
       // inner devices lean toward the cursor
       if (!reduce) {
         for (const n of nodes) {
           if (n.edge) continue
-          const dx = mouse.x - (cx + n.hx * R)
-          const dy = mouse.y - (cy + n.hy * R)
+          const dx = mouse.x - (cx + n.hx * activeR)
+          const dy = mouse.y - (cy + floatY + n.hy * activeR)
           const d = Math.hypot(dx, dy)
           let tx = 0, ty = 0
           if (d < PULL && d > 1) {
@@ -333,13 +356,13 @@ export default function NetworkBackground() {
       const P = nodes.map((n) => pos(n, t))
 
       // soft glow behind the mesh
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.1)
+      const g = ctx.createRadialGradient(cx, cy + floatY, 0, cx, cy + floatY, activeR * 1.1)
       g.addColorStop(0, 'rgba(250,1,1,0.14)')
       g.addColorStop(0.7, 'rgba(250,1,1,0.03)')
       g.addColorStop(1, 'rgba(250,1,1,0)')
       ctx.fillStyle = g
       ctx.beginPath()
-      ctx.arc(cx, cy, R * 1.1, 0, TAU)
+      ctx.arc(cx, cy + floatY, activeR * 1.1, 0, TAU)
       ctx.fill()
 
       // links: circular arcs on the boundary, straight lines elsewhere
@@ -350,7 +373,7 @@ export default function NetworkBackground() {
         ctx.beginPath()
         if (l.arc) {
           const a0 = nodes[l.a].ang
-          ctx.arc(cx, cy, R, a0, a0 + TAU / RING)
+          ctx.arc(cx, cy + floatY, activeR, a0, a0 + TAU / RING)
         } else {
           ctx.moveTo(P[l.a].x, P[l.a].y)
           ctx.lineTo(P[l.b].x, P[l.b].y)
@@ -390,7 +413,7 @@ export default function NetworkBackground() {
       // draw packets
       ctx.fillStyle = '#FA0101'
       for (const p of packets) {
-        const pt = packetPoint(p, P)
+        const pt = packetPoint(p, P, t)
         ctx.beginPath()
         ctx.arc(pt.x, pt.y, 3, 0, TAU)
         ctx.fill()
@@ -425,6 +448,7 @@ export default function NetworkBackground() {
         ctx.textBaseline = 'middle'
         ctx.fillText(n.label, x, ty + 12)
       }
+      ctx.globalAlpha = 1
     }
 
     const hit = () => {
@@ -482,6 +506,16 @@ export default function NetworkBackground() {
     }
     window.addEventListener('resize', onResize)
 
+    // ResizeObserver for reliable dimension sync across load and layout changes
+    let ro = null
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        layout()
+        if (reduce) draw(0)
+      })
+      ro.observe(parent)
+    }
+
     // Pause animation when scrolled offscreen to guarantee 120fps native scroll
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting
@@ -495,6 +529,8 @@ export default function NetworkBackground() {
     observer.observe(parent)
 
     return () => {
+      if (introTween) introTween.kill()
+      if (ro) ro.disconnect()
       observer.disconnect()
       if (raf) cancelAnimationFrame(raf)
       parent.removeEventListener('pointermove', onMove)

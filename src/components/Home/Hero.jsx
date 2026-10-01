@@ -1,27 +1,97 @@
+import { useRef } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import NetworkBackground from './NetworkBackground';
 import { ShieldCheck } from 'lucide-react';
 
+gsap.registerPlugin(useGSAP);
+
 const Hero = () => {
+    const heroRef = useRef(null);
+
+    useGSAP(
+        () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+            // Staggered Text & UI Sequence
+            tl.from(
+                '.hero-eyebrow',
+                {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.6,
+                },
+                0.1
+            )
+                .from(
+                    '.hero-heading',
+                    {
+                        y: 35,
+                        opacity: 0,
+                        duration: 0.8,
+                    },
+                    '-=0.35'
+                )
+                .from(
+                    '.hero-subtitle',
+                    {
+                        y: 25,
+                        opacity: 0,
+                        duration: 0.7,
+                    },
+                    '-=0.45'
+                )
+                .from(
+                    '.hero-cta',
+                    {
+                        y: 20,
+                        opacity: 0,
+                        stagger: 0.12,
+                        duration: 0.6,
+                    },
+                    '-=0.35'
+                )
+                .from(
+                    '.hero-metrics',
+                    {
+                        y: 20,
+                        opacity: 0,
+                        duration: 0.8,
+                    },
+                    '-=0.3'
+                );
+        },
+        { scope: heroRef }
+    );
+
     return (
-        <section className="relative flex min-h-[calc(100vh-65px)] flex-col justify-between overflow-hidden bg-[#00102E] pt-8 sm:pt-12 pb-6 sm:pb-8">
-            {/* Interactive Network Graphic */}
-            <NetworkBackground />
+        <section
+            ref={heroRef}
+            className="relative flex min-h-[calc(100svh-56px)] md:min-h-[calc(100vh-65px)] flex-col justify-between overflow-hidden bg-[#00102E] pt-3 sm:pt-8 md:pt-12 pb-6 sm:pb-8"
+        >
+            {/* Interactive Network Graphic Orb */}
+            <div className="absolute inset-0 pointer-events-auto">
+                <NetworkBackground />
+            </div>
 
             {/* Main Content Area: Full Width on Mobile, Column on Tablet/Desktop */}
-            <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 my-auto">
+            <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 mt-2 sm:my-auto">
                 <div className="w-full max-w-full md:max-w-[430px] lg:max-w-xl">
                     {/* Eyebrow */}
-                    <p className="text-xs sm:text-sm font-semibold tracking-wider sm:tracking-widest text-red uppercase">
+                    <p className="hero-eyebrow text-xs sm:text-sm font-semibold tracking-wider sm:tracking-widest text-red uppercase">
                         Telecom & Data Center Infrastructure
                     </p>
 
                     {/* Main Headline */}
-                    <h1 className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-[2.35rem] lg:text-5xl xl:text-6xl font-bold font-heading text-white leading-[1.14] tracking-tight">
+                    <h1 className="hero-heading mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-[2.35rem] lg:text-5xl xl:text-6xl font-bold font-heading text-white leading-[1.14] tracking-tight">
                         Future-ready infrastructure, built end to end.
                     </h1>
 
                     {/* Subtitle */}
-                    <p className="mt-4 sm:mt-5 text-base sm:text-lg font-body text-slate-300 leading-relaxed">
+                    <p className="hero-subtitle mt-4 sm:mt-5 text-base sm:text-lg font-body text-slate-300 leading-relaxed">
                         From site survey and design to data center and fiber deployment, we
                         deliver the infrastructure your network depends on.
                     </p>
@@ -37,7 +107,7 @@ const Hero = () => {
                                     window.scrollTo({ top, behavior: 'smooth' });
                                 }
                             }}
-                            className="w-full sm:w-auto rounded-xl bg-red px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-red-dark cursor-pointer text-center shadow-md shadow-red/20"
+                            className="hero-cta w-full sm:w-auto rounded-xl bg-red px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-red-dark cursor-pointer text-center shadow-md shadow-red/20"
                         >
                             Explore Services
                         </button>
@@ -50,7 +120,7 @@ const Hero = () => {
                                     window.scrollTo({ top, behavior: 'smooth' });
                                 }
                             }}
-                            className="w-full sm:w-auto rounded-xl border border-white/25 px-6 py-3 font-semibold text-white transition-colors duration-200 hover:border-white hover:bg-white/10 cursor-pointer text-center"
+                            className="hero-cta w-full sm:w-auto rounded-xl border border-white/25 px-6 py-3 font-semibold text-white transition-colors duration-200 hover:border-white hover:bg-white/10 cursor-pointer text-center"
                         >
                             About Netxpert
                         </button>
@@ -59,7 +129,7 @@ const Hero = () => {
             </div>
 
             {/* Full-Width Metrics Bar with Divider Line */}
-            <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 mt-8 sm:mt-10 md:mt-12">
+            <div className="hero-metrics relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 mt-8 sm:mt-10 md:mt-12">
                 <div className="border-t border-white/10 pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-12 md:gap-16 font-body text-center">
                     <div className="flex items-center gap-2.5">
                         <ShieldCheck className="h-5 w-5 text-red shrink-0" />

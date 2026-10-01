@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import { Shield } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 
 import 'swiper/css';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const portfolioProjects = [
     {
@@ -39,21 +44,68 @@ const portfolioProjects = [
 ];
 
 const Portfolio = () => {
+    const portfolioRef = useRef(null);
     const [swiperInstance, setSwiperInstance] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
+    useGSAP(
+        () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
+            gsap.fromTo(
+                '.portfolio-title',
+                { y: 30, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.portfolio-title',
+                        start: 'top 88%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+
+            gsap.fromTo(
+                '.portfolio-slider-wrapper',
+                { y: 40, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.85,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.portfolio-slider-wrapper',
+                        start: 'top 82%',
+                        toggleActions: 'play none none none',
+                    },
+                    clearProps: 'transform,opacity',
+                }
+            );
+        },
+        { scope: portfolioRef }
+    );
+
     return (
-        <section id="portfolio" className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
+        <section
+            id="portfolio"
+            ref={portfolioRef}
+            className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20"
+        >
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
                 {/* Left-Aligned Section Title */}
-                <div className="mb-6 sm:mb-8">
+                <div className="portfolio-title mb-6 sm:mb-8">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight">
                         Portfolio
                     </h2>
                 </div>
 
                 {/* Swiper Slider Container */}
-                <div className="relative">
+                <div className="portfolio-slider-wrapper relative">
                     <Swiper
                         modules={[Autoplay]}
                         autoplay={{
