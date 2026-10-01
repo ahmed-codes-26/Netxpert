@@ -19,7 +19,7 @@ const serviceLinks = [
 
 const Footer = () => {
     return (
-        <footer className="relative bg-[#141414] text-white border-t border-border/10 overflow-hidden font-body">
+        <footer className="relative bg-[#000A1D] text-white border-t border-white/10 overflow-hidden font-body">
             <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 sm:pt-20 pb-12">
                 {/* 4-Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
@@ -27,7 +27,7 @@ const Footer = () => {
                     {/* Column 1: Brand & Bio (4 cols) */}
                     <div className="lg:col-span-4 flex flex-col space-y-5">
                         <div className="flex items-center gap-3">
-                            <img src="/logo.png" alt="Netxpert Logo" className="h-10 w-auto object-contain brightness-0 invert" />
+                            <img src="/logo.png" alt="Netxpert Logo" className="h-10 w-auto object-contain" />
                             <h3 className="text-2xl font-bold font-heading text-white tracking-tight">
                                 Net<span className="text-red">xpert</span>
                             </h3>

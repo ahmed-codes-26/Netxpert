@@ -63,11 +63,11 @@ const serviceList = [
 
 const Services = () => {
     return (
-        <section id="services" className="relative w-full bg-white border-t border-border py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
+        <section id="services" className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
                 {/* Left-Aligned Section Title */}
                 <div className="mb-6 sm:mb-8">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-ink tracking-tight">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight">
                         Services
                     </h2>
                 </div>
@@ -80,7 +80,7 @@ const Services = () => {
                         return (
                             <div
                                 key={service.id}
-                                className="group rounded-2xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer min-h-[320px] bg-white border border-border text-ink hover:bg-red hover:text-white hover:border-red hover:shadow-xl hover:shadow-red/25 hover:-translate-y-1.5"
+                                className="group rounded-2xl p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 cursor-pointer min-h-[320px] bg-[#051838] border border-white/10 text-white hover:bg-red hover:text-white hover:border-red hover:shadow-2xl hover:shadow-red/30 hover:-translate-y-1.5 shadow-lg"
                             >
                                 <div>
                                     {/* Line Art Icon with pure CSS hover color transition */}
@@ -89,12 +89,12 @@ const Services = () => {
                                     </div>
 
                                     {/* Service Title */}
-                                    <h3 className="font-heading text-xl sm:text-2xl font-bold mb-3.5 tracking-tight text-ink group-hover:text-white transition-colors duration-200">
+                                    <h3 className="font-heading text-xl sm:text-2xl font-bold mb-3.5 tracking-tight text-white group-hover:text-white transition-colors duration-200">
                                         {service.title}
                                     </h3>
 
                                     {/* Service Description */}
-                                    <p className="font-body text-sm sm:text-base leading-relaxed text-muted group-hover:text-white/90 transition-colors duration-200">
+                                    <p className="font-body text-sm sm:text-base leading-relaxed text-slate-300 group-hover:text-white/90 transition-colors duration-200">
                                         {service.description}
                                     </p>
                                 </div>

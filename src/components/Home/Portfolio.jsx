@@ -43,11 +43,11 @@ const Portfolio = () => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
-        <section id="portfolio" className="relative w-full bg-white border-t border-border py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
+        <section id="portfolio" className="relative w-full bg-[#00102E] border-t border-white/10 py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
                 {/* Left-Aligned Section Title */}
                 <div className="mb-6 sm:mb-8">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-ink tracking-tight">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight">
                         Portfolio
                     </h2>
                 </div>
@@ -84,7 +84,7 @@ const Portfolio = () => {
                     >
                         {portfolioProjects.map((project) => (
                             <SwiperSlide key={project.id} className="h-auto">
-                                <div className="group relative w-full h-[360px] sm:h-[400px] md:h-[420px] rounded-2xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 bg-gradient-to-b from-[#A0A5AE] via-[#656A74] to-[#25282E] flex flex-col justify-between p-6 sm:p-7 select-none">
+                                <div className="group relative w-full h-[360px] sm:h-[400px] md:h-[420px] rounded-2xl overflow-hidden shadow-xl border border-white/10 transition-all duration-300 hover:shadow-2xl hover:border-white/20 hover:-translate-y-1.5 bg-gradient-to-b from-[#0F2859] via-[#07193D] to-[#020B1C] flex flex-col justify-between p-6 sm:p-7 select-none">
                                     
                                     {/* Top Area */}
                                     <div />
@@ -112,7 +112,7 @@ const Portfolio = () => {
                         ))}
                     </Swiper>
 
-                    {/* Dedicated Pagination Bullets strictly in white space below cards (matching Image 1) */}
+                    {/* Dedicated Pagination Bullets strictly below cards */}
                     <div className="flex items-center justify-center gap-2 mt-8 min-h-[16px] z-10">
                         {portfolioProjects.map((_, idx) => (
                             <button
@@ -123,7 +123,7 @@ const Portfolio = () => {
                                 className={`transition-all duration-300 rounded-full cursor-pointer border-none outline-none p-0 flex items-center justify-center ${
                                     activeIndex === idx
                                         ? 'w-2 h-2 bg-red scale-110 shadow-sm'
-                                        : 'w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400'
+                                        : 'w-1.5 h-1.5 bg-slate-600 hover:bg-slate-400'
                                 }`}
                             />
                         ))}

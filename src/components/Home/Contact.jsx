@@ -89,17 +89,17 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="relative w-full bg-white border-t border-border py-12 sm:py-16 md:py-20 scroll-mt-16 sm:scroll-mt-20">
+        <section id="contact" className="relative w-full bg-[#00102E] border-t border-white/10 py-12 sm:py-16 md:py-20 scroll-mt-16 sm:scroll-mt-20">
             <div className="max-w-7xl mx-auto px-5 sm:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
                     
                     {/* Left Column: Info & Details (5 cols) */}
                     <div className="lg:col-span-5 flex flex-col">
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-ink tracking-tight mb-4 sm:mb-5">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-white tracking-tight mb-4 sm:mb-5">
                             Get in Touch
                         </h2>
                         
-                        <p className="text-body text-sm sm:text-[15px] leading-relaxed mb-8 sm:mb-10 max-w-lg">
+                        <p className="text-slate-300 text-sm sm:text-[15px] leading-relaxed mb-8 sm:mb-10 max-w-lg">
                             Have a question about our security infrastructure services or need an urgent system assessment? Reach out to our engineering team today.
                         </p>
 
@@ -111,10 +111,10 @@ const Contact = () => {
                                     <MapPin className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
                                 <div>
-                                    <h4 className="font-heading font-bold text-ink text-sm sm:text-base">
+                                    <h4 className="font-heading font-bold text-white text-sm sm:text-base">
                                         Head Office
                                     </h4>
-                                    <p className="text-muted text-xs sm:text-sm mt-0.5 leading-normal">
+                                    <p className="text-slate-400 text-xs sm:text-sm mt-0.5 leading-normal">
                                         Commercial Zone, Gulberg III, Lahore, Pakistan
                                     </p>
                                 </div>
@@ -126,12 +126,12 @@ const Contact = () => {
                                     <Phone className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
                                 <div>
-                                    <h4 className="font-heading font-bold text-ink text-sm sm:text-base">
+                                    <h4 className="font-heading font-bold text-white text-sm sm:text-base">
                                         Direct Phone
                                     </h4>
                                     <a
                                         href="tel:+9204235789000"
-                                        className="text-muted text-xs sm:text-sm mt-0.5 hover:text-red transition-colors inline-block"
+                                        className="text-slate-400 text-xs sm:text-sm mt-0.5 hover:text-red transition-colors inline-block"
                                     >
                                         +92 (042) 3578-9000
                                     </a>
@@ -144,12 +144,12 @@ const Contact = () => {
                                     <Mail className="h-5 w-5 fill-red/15 stroke-[2]" />
                                 </div>
                                 <div>
-                                    <h4 className="font-heading font-bold text-ink text-sm sm:text-base">
+                                    <h4 className="font-heading font-bold text-white text-sm sm:text-base">
                                         Email Support
                                     </h4>
                                     <a
                                         href="mailto:info@connectcommunications.pk"
-                                        className="text-muted text-xs sm:text-sm mt-0.5 hover:text-red transition-colors inline-block"
+                                        className="text-slate-400 text-xs sm:text-sm mt-0.5 hover:text-red transition-colors inline-block"
                                     >
                                         info@connectcommunications.pk
                                     </a>
@@ -158,14 +158,14 @@ const Contact = () => {
                         </div>
 
                         {/* Business Hours Card */}
-                        <div className="bg-surface rounded-2xl p-6 border border-border/80 max-w-lg">
-                            <h4 className="font-heading font-bold text-ink text-base mb-2">
+                        <div className="bg-[#051838] rounded-2xl p-6 border border-white/10 max-w-lg shadow-lg">
+                            <h4 className="font-heading font-bold text-white text-base mb-2">
                                 Business Hours
                             </h4>
-                            <p className="text-body text-xs sm:text-sm leading-relaxed">
+                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                                 Monday – Saturday: 9:00 AM – 6:00 PM
                             </p>
-                            <p className="text-body text-xs sm:text-sm leading-relaxed mt-1">
+                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-1">
                                 24/7 Emergency Support for Enterprise Clients
                             </p>
                         </div>
@@ -177,8 +177,8 @@ const Contact = () => {
                             
                             {/* Success Notification Banner */}
                             {isSubmitted && (
-                                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-3 animate-fade-in">
-                                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+                                <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 flex items-center gap-3 animate-fade-in">
+                                    <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />
                                     <p className="text-xs sm:text-sm font-medium">
                                         Thank you! Your message has been sent successfully. Our engineering team will get back to you shortly.
                                     </p>
@@ -187,7 +187,7 @@ const Contact = () => {
 
                             {/* Full Name */}
                             <div className="flex flex-col">
-                                <label htmlFor="fullName" className="text-xs sm:text-sm font-semibold text-ink mb-2">
+                                <label htmlFor="fullName" className="text-xs sm:text-sm font-semibold text-white mb-2">
                                     Full Name <span className="text-red">*</span>
                                 </label>
                                 <input
@@ -198,10 +198,10 @@ const Contact = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     placeholder="John Doe"
-                                    className={`w-full px-4 py-3 sm:py-3.5 rounded-xl border bg-white text-ink text-sm sm:text-[15px] placeholder:text-muted/60 transition-all focus:outline-none ${
+                                    className={`w-full px-4 py-3 sm:py-3.5 rounded-xl border bg-[#051838] text-white text-sm sm:text-[15px] placeholder:text-slate-500 transition-all focus:outline-none ${
                                         errors.fullName && touched.fullName
                                             ? 'border-red ring-1 ring-red'
-                                            : 'border-border focus:border-red focus:ring-1 focus:ring-red'
+                                            : 'border-white/15 focus:border-red focus:ring-1 focus:ring-red'
                                     }`}
                                 />
                                 {errors.fullName && touched.fullName && (
@@ -213,7 +213,7 @@ const Contact = () => {
 
                             {/* Email Address */}
                             <div className="flex flex-col">
-                                <label htmlFor="email" className="text-xs sm:text-sm font-semibold text-ink mb-2">
+                                <label htmlFor="email" className="text-xs sm:text-sm font-semibold text-white mb-2">
                                     Email Address <span className="text-red">*</span>
                                 </label>
                                 <input
@@ -224,10 +224,10 @@ const Contact = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     placeholder="john@example.com"
-                                    className={`w-full px-4 py-3 sm:py-3.5 rounded-xl border bg-white text-ink text-sm sm:text-[15px] placeholder:text-muted/60 transition-all focus:outline-none ${
+                                    className={`w-full px-4 py-3 sm:py-3.5 rounded-xl border bg-[#051838] text-white text-sm sm:text-[15px] placeholder:text-slate-500 transition-all focus:outline-none ${
                                         errors.email && touched.email
                                             ? 'border-red ring-1 ring-red'
-                                            : 'border-border focus:border-red focus:ring-1 focus:ring-red'
+                                            : 'border-white/15 focus:border-red focus:ring-1 focus:ring-red'
                                     }`}
                                 />
                                 {errors.email && touched.email && (
@@ -239,7 +239,7 @@ const Contact = () => {
 
                             {/* Phone Number */}
                             <div className="flex flex-col">
-                                <label htmlFor="phone" className="text-xs sm:text-sm font-semibold text-ink mb-2">
+                                <label htmlFor="phone" className="text-xs sm:text-sm font-semibold text-white mb-2">
                                     Phone Number
                                 </label>
                                 <input
@@ -249,13 +249,13 @@ const Contact = () => {
                                     value={formData.phone}
                                     onChange={handleChange}
                                     placeholder="+92 300 1234567"
-                                    className="w-full px-4 py-3 sm:py-3.5 rounded-xl border border-border bg-white text-ink text-sm sm:text-[15px] placeholder:text-muted/60 transition-all focus:outline-none focus:border-red focus:ring-1 focus:ring-red"
+                                    className="w-full px-4 py-3 sm:py-3.5 rounded-xl border border-white/15 bg-[#051838] text-white text-sm sm:text-[15px] placeholder:text-slate-500 transition-all focus:outline-none focus:border-red focus:ring-1 focus:ring-red"
                                 />
                             </div>
 
                             {/* Message */}
                             <div className="flex flex-col">
-                                <label htmlFor="message" className="text-xs sm:text-sm font-semibold text-ink mb-2">
+                                <label htmlFor="message" className="text-xs sm:text-sm font-semibold text-white mb-2">
                                     Message <span className="text-red">*</span>
                                 </label>
                                 <textarea
@@ -266,10 +266,10 @@ const Contact = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     placeholder="Tell us about your project or security needs..."
-                                    className={`w-full px-4 py-3.5 rounded-xl border bg-white text-ink text-sm sm:text-[15px] placeholder:text-muted/60 transition-all focus:outline-none resize-y ${
+                                    className={`w-full px-4 py-3.5 rounded-xl border bg-[#051838] text-white text-sm sm:text-[15px] placeholder:text-slate-500 transition-all focus:outline-none resize-y ${
                                         errors.message && touched.message
                                             ? 'border-red ring-1 ring-red'
-                                            : 'border-border focus:border-red focus:ring-1 focus:ring-red'
+                                            : 'border-white/15 focus:border-red focus:ring-1 focus:ring-red'
                                     }`}
                                 />
                                 {errors.message && touched.message && (
@@ -284,7 +284,7 @@ const Contact = () => {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="inline-flex items-center justify-center border-2 border-red text-red hover:bg-red hover:text-white transition-all duration-300 rounded-full px-8 py-3 text-sm sm:text-base font-medium font-body cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-98"
+                                    className="inline-flex items-center justify-center border-2 border-red text-red hover:bg-red hover:text-white transition-all duration-300 rounded-full px-8 py-3 text-sm sm:text-base font-medium font-body cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-98 shadow-sm"
                                 >
                                     {isSubmitting ? 'Sending...' : 'Send Message'}
                                 </button>

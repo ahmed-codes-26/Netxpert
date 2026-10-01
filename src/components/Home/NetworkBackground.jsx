@@ -292,20 +292,20 @@ export default function NetworkBackground() {
       ctx.save()
       ctx.translate(x, y)
 
-      ctx.fillStyle = '#FFFFFF'
+      ctx.fillStyle = '#051838'
       ctx.beginPath()
       ctx.roundRect(-size / 2, -size / 2, size, size, size * 0.28)
       ctx.fill()
 
       ctx.lineWidth = 1.2
-      ctx.strokeStyle = hot > 0.05 ? `rgba(217,30,30,${0.4 + 0.6 * hot})` : '#E6E6E6'
+      ctx.strokeStyle = hot > 0.05 ? `rgba(250,1,1,${0.5 + 0.5 * hot})` : '#152A50'
       ctx.stroke()
 
       ctx.scale((size * 0.55) / 24, (size * 0.55) / 24)
       ctx.lineWidth = 1.7
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
-      ctx.strokeStyle = ctx.fillStyle = hot > 0.05 ? '#D91E1E' : '#6B6B6B'
+      ctx.strokeStyle = ctx.fillStyle = hot > 0.05 ? '#FA0101' : '#94A3B8'
       ICONS[n.type](ctx)
       ctx.restore()
     }
@@ -334,9 +334,9 @@ export default function NetworkBackground() {
 
       // soft glow behind the mesh
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.1)
-      g.addColorStop(0, 'rgba(217,30,30,0.06)')
-      g.addColorStop(0.7, 'rgba(217,30,30,0.02)')
-      g.addColorStop(1, 'rgba(217,30,30,0)')
+      g.addColorStop(0, 'rgba(250,1,1,0.14)')
+      g.addColorStop(0.7, 'rgba(250,1,1,0.03)')
+      g.addColorStop(1, 'rgba(250,1,1,0)')
       ctx.fillStyle = g
       ctx.beginPath()
       ctx.arc(cx, cy, R * 1.1, 0, TAU)
@@ -345,7 +345,7 @@ export default function NetworkBackground() {
       // links: circular arcs on the boundary, straight lines elsewhere
       for (const l of LINKS) {
         const lit = hovered >= 0 && (l.a === hovered || l.b === hovered)
-        ctx.strokeStyle = lit ? 'rgba(217,30,30,0.85)' : '#D5D8DE'
+        ctx.strokeStyle = lit ? 'rgba(250,1,1,0.85)' : 'rgba(255,255,255,0.12)'
         ctx.lineWidth = lit ? 2 : l.arc ? 1.5 : 1.2
         ctx.beginPath()
         if (l.arc) {
@@ -388,7 +388,7 @@ export default function NetworkBackground() {
       }
 
       // draw packets
-      ctx.fillStyle = '#D91E1E'
+      ctx.fillStyle = '#FA0101'
       for (const p of packets) {
         const pt = packetPoint(p, P)
         ctx.beginPath()
@@ -413,10 +413,13 @@ export default function NetworkBackground() {
         ctx.font = '600 12px Manrope, sans-serif'
         const tw = ctx.measureText(n.label).width + 20
         const ty = y + (tileSize(n) * 1.14) / 2 + 8
-        ctx.fillStyle = '#1A1A1A'
+        ctx.fillStyle = '#051838'
+        ctx.strokeStyle = '#152A50'
+        ctx.lineWidth = 1
         ctx.beginPath()
         ctx.roundRect(x - tw / 2, ty, tw, 24, 8)
         ctx.fill()
+        ctx.stroke()
         ctx.fillStyle = '#FFFFFF'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
