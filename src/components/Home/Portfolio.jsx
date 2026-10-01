@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import { Shield } from 'lucide-react';
 
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 const portfolioProjects = [
     {
@@ -39,6 +39,9 @@ const portfolioProjects = [
 ];
 
 const Portfolio = () => {
+    const [swiperInstance, setSwiperInstance] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
     return (
         <section id="portfolio" className="relative w-full bg-white border-t border-border py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
@@ -49,20 +52,19 @@ const Portfolio = () => {
                     </h2>
                 </div>
 
-                {/* Swiper Slider Container with Top Headroom and Bottom Pagination Space */}
+                {/* Swiper Slider Container */}
                 <div className="relative">
                     <Swiper
-                        modules={[Autoplay, Pagination]}
+                        modules={[Autoplay]}
                         autoplay={{
                             delay: 3000,
                             disableOnInteraction: false,
                             pauseOnMouseEnter: true,
                         }}
-                        pagination={{
-                            clickable: true,
-                        }}
                         loop={true}
                         grabCursor={true}
+                        onSwiper={setSwiperInstance}
+                        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                         spaceBetween={24}
                         breakpoints={{
                             0: {
@@ -78,7 +80,7 @@ const Portfolio = () => {
                                 spaceBetween: 28,
                             },
                         }}
-                        className="portfolio-swiper-container w-full pt-3 pb-14 px-1"
+                        className="portfolio-swiper-container w-full pt-3 pb-2 px-1"
                     >
                         {portfolioProjects.map((project) => (
                             <SwiperSlide key={project.id} className="h-auto">
@@ -109,6 +111,23 @@ const Portfolio = () => {
                             </SwiperSlide>
                         ))}
                     </Swiper>
+
+                    {/* Dedicated Pagination Bullets strictly in white space below cards (matching Image 1) */}
+                    <div className="flex items-center justify-center gap-2 mt-8 min-h-[16px] z-10">
+                        {portfolioProjects.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => swiperInstance?.slideToLoop(idx)}
+                                aria-label={`Go to slide ${idx + 1}`}
+                                className={`transition-all duration-300 rounded-full cursor-pointer border-none outline-none p-0 flex items-center justify-center ${
+                                    activeIndex === idx
+                                        ? 'w-2 h-2 bg-red scale-110 shadow-sm'
+                                        : 'w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400'
+                                }`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
