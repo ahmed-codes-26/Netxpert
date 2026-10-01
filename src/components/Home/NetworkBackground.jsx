@@ -292,17 +292,11 @@ export default function NetworkBackground() {
       ctx.save()
       ctx.translate(x, y)
 
-      ctx.shadowColor = hot > 0.05 ? `rgba(217,30,30,${0.35 * hot})` : 'rgba(0,0,0,0.08)'
-      ctx.shadowBlur = hot > 0.05 ? 18 : 10
-      ctx.shadowOffsetY = 3
       ctx.fillStyle = '#FFFFFF'
       ctx.beginPath()
       ctx.roundRect(-size / 2, -size / 2, size, size, size * 0.28)
       ctx.fill()
 
-      ctx.shadowColor = 'transparent'
-      ctx.shadowBlur = 0
-      ctx.shadowOffsetY = 0
       ctx.lineWidth = 1.2
       ctx.strokeStyle = hot > 0.05 ? `rgba(217,30,30,${0.4 + 0.6 * hot})` : '#E6E6E6'
       ctx.stroke()
@@ -395,15 +389,12 @@ export default function NetworkBackground() {
 
       // draw packets
       ctx.fillStyle = '#D91E1E'
-      ctx.shadowColor = 'rgba(217,30,30,0.6)'
-      ctx.shadowBlur = 10
       for (const p of packets) {
         const pt = packetPoint(p, P)
         ctx.beginPath()
         ctx.arc(pt.x, pt.y, 3, 0, TAU)
         ctx.fill()
       }
-      ctx.shadowBlur = 0
 
       // device tiles
       nodes.forEach((n, i) => {
@@ -470,7 +461,13 @@ export default function NetworkBackground() {
     }
     const onResize = () => { layout(); if (reduce) draw(0) }
 
-    const loop = (t) => { draw(t); frame++; raf = requestAnimationFrame(loop) }
+    let isVisible = true
+    const loop = (t) => {
+      if (!isVisible) return
+      draw(t)
+      frame++
+      raf = requestAnimationFrame(loop)
+    }
 
     layout()
     if (reduce) draw(0)
@@ -482,8 +479,21 @@ export default function NetworkBackground() {
     }
     window.addEventListener('resize', onResize)
 
+    // Pause animation when scrolled offscreen to guarantee 120fps native scroll
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting
+      if (isVisible && !raf && !reduce) {
+        raf = requestAnimationFrame(loop)
+      } else if (!isVisible && raf) {
+        cancelAnimationFrame(raf)
+        raf = null
+      }
+    }, { threshold: 0.05 })
+    observer.observe(parent)
+
     return () => {
-      cancelAnimationFrame(raf)
+      observer.disconnect()
+      if (raf) cancelAnimationFrame(raf)
       parent.removeEventListener('pointermove', onMove)
       parent.removeEventListener('pointerleave', onLeave)
       parent.removeEventListener('pointerdown', onDown)

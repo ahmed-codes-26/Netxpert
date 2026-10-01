@@ -29,7 +29,7 @@ const NavBar = () => {
 
     return (
         <>
-            <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-border">
+            <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xs border-b border-border transform-gpu">
                 <nav className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
                     {/* Brand Logo & Name */}
                     <div className="flex items-center gap-3">
