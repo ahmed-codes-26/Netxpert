@@ -17,7 +17,7 @@ const stats = [
 
 const About = () => {
     return (
-        <section id="about" className="relative w-full bg-white border-t border-border py-10 sm:py-14 md:py-16 overflow-hidden">
+        <section id="about" className="relative w-full bg-white border-t border-border py-10 sm:py-14 md:py-16 overflow-hidden scroll-mt-16 sm:scroll-mt-20">
             <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
                 {/* Left-Aligned Section Title */}
                 <div className="mb-6 sm:mb-8">

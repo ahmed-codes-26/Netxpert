@@ -28,11 +28,31 @@ const Hero = () => {
 
                     {/* Action Buttons */}
                     <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 font-body">
-                        <button className="w-full sm:w-auto rounded-xl bg-red px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-red-dark cursor-pointer text-center">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                const target = document.getElementById('services');
+                                if (target) {
+                                    const top = target.getBoundingClientRect().top + window.pageYOffset - 62;
+                                    window.scrollTo({ top, behavior: 'smooth' });
+                                }
+                            }}
+                            className="w-full sm:w-auto rounded-xl bg-red px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-red-dark cursor-pointer text-center"
+                        >
                             Explore Services
                         </button>
-                        <button className="w-full sm:w-auto rounded-xl border border-ink/20 px-6 py-3 font-semibold text-ink transition-colors duration-200 hover:border-ink hover:bg-surface cursor-pointer text-center">
-                            View Projects
+                        <button
+                            type="button"
+                            onClick={() => {
+                                const target = document.getElementById('about');
+                                if (target) {
+                                    const top = target.getBoundingClientRect().top + window.pageYOffset - 62;
+                                    window.scrollTo({ top, behavior: 'smooth' });
+                                }
+                            }}
+                            className="w-full sm:w-auto rounded-xl border border-ink/20 px-6 py-3 font-semibold text-ink transition-colors duration-200 hover:border-ink hover:bg-surface cursor-pointer text-center"
+                        >
+                            About Netxpert
                         </button>
                     </div>
                 </div>

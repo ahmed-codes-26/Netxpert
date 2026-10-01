@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-    { name: 'Home', href: '#', active: true },
+    { name: 'Home', href: '#' },
     { name: 'About', href: '#about' },
     { name: 'Services', href: '#services' },
     { name: 'Portfolio', href: '#portfolio' },
@@ -11,9 +11,24 @@ const navLinks = [
 
 const NavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
     const closeMenu = () => setIsMenuOpen(false);
+
+    // Smooth scroll listener for fluid sticky header transition
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 40) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Lock background scrolling when mobile menu is open
     useEffect(() => {
@@ -27,17 +42,60 @@ const NavBar = () => {
         };
     }, [isMenuOpen]);
 
+    // Precise smooth scroll positioning directly below the navigation bar
+    const scrollToSection = (e, href) => {
+        e.preventDefault();
+        if (!href || href === '#') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMenu();
+            return;
+        }
+
+        const targetId = href.replace('#', '');
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            // Target offset always matches the sticky navbar height (62px) once scrolled to destination
+            const stickyNavHeight = 62;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - stickyNavHeight;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth',
+            });
+        }
+        closeMenu();
+    };
+
     return (
         <>
-            <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xs border-b border-border transform-gpu">
-                <nav className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+            {/* Header: Fixed with fluid transition for padding, shadow, and backdrop */}
+            <header
+                className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 ease-out transform-gpu ${
+                    isScrolled
+                        ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-border py-2.5'
+                        : 'bg-white/90 backdrop-blur-xs border-b border-border/80 py-4 shadow-none'
+                }`}
+            >
+                <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center transition-all duration-300">
                     {/* Brand Logo & Name */}
-                    <div className="flex items-center gap-3">
-                        <img src="/logo.png" alt="Netxpert Logo" className="h-12 w-auto object-contain" />
+                    <a
+                        href="#"
+                        onClick={(e) => scrollToSection(e, '#')}
+                        className="flex items-center gap-3 cursor-pointer group"
+                    >
+                        <img
+                            src="/logo.png"
+                            alt="Netxpert Logo"
+                            className={`w-auto object-contain transition-all duration-300 ${
+                                isScrolled ? 'h-9' : 'h-11'
+                            }`}
+                        />
                         <h2 className="text-2xl font-bold font-heading text-ink tracking-tight">
                             Net<span className="text-red">xpert</span>
                         </h2>
-                    </div>
+                    </a>
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center gap-8 font-body font-medium text-sm">
@@ -45,11 +103,8 @@ const NavBar = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
-                                className={`relative py-1 transition-colors duration-200 ${
-                                    link.active
-                                        ? 'text-ink font-semibold after:w-full'
-                                        : 'text-muted hover:text-ink after:w-0 hover:after:w-full'
-                                } after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red after:transition-all after:duration-200`}
+                                onClick={(e) => scrollToSection(e, link.href)}
+                                className="relative py-1 text-muted hover:text-ink transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-red after:transition-all after:duration-200"
                             >
                                 {link.name}
                             </a>
@@ -60,7 +115,8 @@ const NavBar = () => {
                     <div className="hidden md:flex items-center gap-4">
                         <a
                             href="#contact"
-                            className="px-5 py-2 text-sm font-medium text-white bg-red hover:bg-red-dark transition-colors duration-200 rounded-full shadow-sm"
+                            onClick={(e) => scrollToSection(e, '#contact')}
+                            className="px-5 py-2.5 text-sm font-medium text-white bg-red hover:bg-red-dark transition-colors duration-200 rounded-full shadow-sm"
                         >
                             Get in Touch
                         </a>
@@ -80,6 +136,9 @@ const NavBar = () => {
                 </nav>
             </header>
 
+            {/* Top Layout Spacer so Hero section doesn't hide behind fixed header */}
+            <div className="h-[72px] sm:h-[80px]" aria-hidden="true" />
+
             {/* Mobile Backdrop Overlay */}
             <div
                 className={`fixed inset-0 z-50 bg-black/50 backdrop-blur-xs transition-opacity duration-300 md:hidden ${
@@ -89,7 +148,7 @@ const NavBar = () => {
                 aria-hidden={!isMenuOpen}
             />
 
-            {/* Mobile Side Drawer (Completely hidden & translated offscreen when closed) */}
+            {/* Mobile Side Drawer Panel */}
             <aside
                 className={`fixed top-0 right-0 z-50 h-full w-[280px] sm:w-[320px] bg-white shadow-2xl border-l border-border flex flex-col justify-between p-6 transition-all duration-300 ease-in-out md:hidden ${
                     isMenuOpen
@@ -117,18 +176,14 @@ const NavBar = () => {
                         </button>
                     </div>
 
-                    {/* Navigation Items */}
+                    {/* Mobile Navigation Links */}
                     <div className="flex flex-col gap-2 mt-6">
                         {navLinks.map((link) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                onClick={closeMenu}
-                                className={`px-4 py-3 rounded-lg text-base font-medium font-body transition-all duration-200 ${
-                                    link.active
-                                        ? 'bg-red-tint text-red font-semibold'
-                                        : 'text-body hover:bg-surface hover:text-ink'
-                                }`}
+                                onClick={(e) => scrollToSection(e, link.href)}
+                                className="px-4 py-3 rounded-lg text-base font-medium font-body text-body hover:bg-surface hover:text-ink transition-all duration-200"
                             >
                                 {link.name}
                             </a>
@@ -140,7 +195,7 @@ const NavBar = () => {
                 <div className="pt-6 border-t border-border">
                     <a
                         href="#contact"
-                        onClick={closeMenu}
+                        onClick={(e) => scrollToSection(e, '#contact')}
                         className="block w-full text-center py-3 text-sm font-medium text-white bg-red hover:bg-red-dark transition-colors duration-200 rounded-full shadow-sm"
                     >
                         Get in Touch
