@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-red: #D91E1E;
+  --color-red-dark: #A81616;
+  --color-red-tint: #FDEDED;
+  --color-ink: #1A1A1A;
+  --color-body: #2E2E2E;
+  --color-muted: #6B6B6B;
+  --color-surface: #F4F4F4;
+  --color-border: #E6E6E6;
+
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+
+  --radius-card: 16px;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); color: var(--color-body); }
+  h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--color-ink); }
+}
